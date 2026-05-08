@@ -5,7 +5,7 @@ const { getNifty500Stocks } = require('./stock.js');
 const {
   calculateCPR,
   getWeeklyCandle,
-  getTradeSetup,
+  getMonthTradeSetup,
   getCPRPosition,
   getPreviousWeekCandle,
   getPreviousMonthCandle,
@@ -29,19 +29,6 @@ async function analyzeStock(stock) {
 
     const price = latest.close;
 
-    // const prevDay = data[data.length - 2];
-
-    // Daily CPR (based on previous day)
-    // const dailyCPR = calculateCPR(prevDay.high, prevDay.low, prevDay.close);
-
-    // Weekly CPR
-    const weeklyCandle = getPreviousWeekCandle(data.slice(0, -1));
-    const weeklyCPR = calculateCPR(
-      weeklyCandle.high,
-      weeklyCandle.low,
-      weeklyCandle.close,
-    );
-
     const monthlyCandle = getPreviousMonthCandle(data.slice(0, -1));
     const monthlyCPR = calculateCPR(
       monthlyCandle.high,
@@ -49,18 +36,15 @@ async function analyzeStock(stock) {
       monthlyCandle.close,
     );
 
-    const weeklyPos = getCPRPosition(price, weeklyCPR);
     const monthlyPos = getCPRPosition(price, monthlyCPR);
 
-    const setup = getTradeSetup(monthlyPos, weeklyPos);
+    const setup = getMonthTradeSetup(monthlyPos);
 
     return {
       stock,
       price: price ? price.toFixed(2) : price,
-      weekly: weeklyPos,
       month: monthlyPos,
       setup,
-      weeklyCPR,
       monthlyCPR,
     };
   } catch (err) {

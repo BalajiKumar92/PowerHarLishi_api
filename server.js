@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const { intraDayStock } = require('./trade_cpr');
 const { weekSwingStock } = require('./weekTrade');
+
+const { monthSwingStock } = require('./monthTrade');
 const { getNarrowCPRStocks } = require('./cpr');
 
 const app = express();
@@ -34,4 +36,14 @@ app.get('/api/cpr-w-swing', async (req, res) => {
   }
 });
 
+app.get('/api/cpr-m-swing', async (req, res) => {
+  try {
+    const result = await monthSwingStock();
+    res.status(200).send({ stocks: result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+monthSwingStock;
 app.listen(5000, () => console.log('Server running on port 5000'));

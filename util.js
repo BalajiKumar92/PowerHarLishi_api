@@ -101,6 +101,15 @@ function getTradeSetup(weekly, daily) {
   return 'Neutral';
 }
 
+function getMonthTradeSetup(postion) {
+  if (postion === 'ABOVE') return 'Strong Bullish';
+  if (postion === 'BELOW') return 'Strong Bearish';
+  // if (postion === 'BELOW') return 'Bullish';
+  // if (postion === 'ABOVE') return 'Bearish';
+
+  return 'No Clear Signal';
+}
+
 function getCPRPosition(price, cpr) {
   if (price > cpr.tc) return 'ABOVE';
   if (price < cpr.bc) return 'BELOW';
@@ -150,4 +159,5 @@ module.exports = {
   getCPRPosition,
   getPreviousWeekCandle,
   getPreviousMonthCandle,
+  getMonthTradeSetup,
 };
