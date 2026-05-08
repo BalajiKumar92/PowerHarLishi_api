@@ -107,10 +107,47 @@ function getCPRPosition(price, cpr) {
   return 'INSIDE';
 }
 
+function getPreviousMonthCandle(data) {
+  if (!data || data.length === 0) return null;
+
+  const candles = data.map((d) => ({
+    ...d,
+    dateObj: new Date(d.date),
+  }));
+
+  const latestDate = candles[candles.length - 1].dateObj;
+
+  // 👉 Current month
+  const currentMonth = latestDate.getMonth();
+  const currentYear = latestDate.getFullYear();
+
+  // 👉 Previous month
+  const prevMonthDate = new Date(currentYear, currentMonth - 1, 1);
+
+  const prevMonth = prevMonthDate.getMonth();
+  const prevYear = prevMonthDate.getFullYear();
+
+  // 👉 Filter previous month candles
+  const prevMonthCandles = candles.filter((d) => {
+    return (
+      d.dateObj.getMonth() === prevMonth && d.dateObj.getFullYear() === prevYear
+    );
+  });
+
+  if (prevMonthCandles.length === 0) return null;
+
+  const high = Math.max(...prevMonthCandles.map((d) => d.high));
+  const low = Math.min(...prevMonthCandles.map((d) => d.low));
+  const close = prevMonthCandles[prevMonthCandles.length - 1].close;
+
+  return { high, low, close };
+}
+
 module.exports = {
   calculateCPR,
   getWeeklyCandle,
   getTradeSetup,
   getCPRPosition,
   getPreviousWeekCandle,
+  getPreviousMonthCandle,
 };

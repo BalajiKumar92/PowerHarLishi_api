@@ -90,8 +90,6 @@ async function getNarrowCPRStocks() {
   return results;
 }
 
-// ▶️ Run Script
-getNarrowCPRStocks().then((res) => {
-  console.log('\n🔥 Narrow CPR Stocks:\n');
-  console.table(res);
-});
+module.exports = {
+  getNarrowCPRStocks,
+};
